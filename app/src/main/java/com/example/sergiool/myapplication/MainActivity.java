@@ -43,11 +43,19 @@ import okhttp3.ResponseBody;
 
 /**
  * Necessário ter as permissões e um FileProvider no Manifest,
- * além de um XML "file_paths"
+ * além de um XML "file_paths" na pasta "res>xml"
+ *
+ * Permissões necessárias:
+ *
+ * <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+ * <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+ * <uses-permission android:name="android.permission.CAMERA" />
+ * <uses-permission android:name="android.permission.IMAGE_CAPTURE" />
  *
  **/
 
 public class MainActivity extends AppCompatActivity {
+    //Diferentes códigos para o onActivityResult
     private static final int IMG_1 = 11;
     private static final int IMG_2 = 12;
     private static final int IMG_3 = 13;
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int IMG_5 = 15;
     private static final int IMG_6 = 16;
 
+    //Transfomar a id dos botões em constantes, para facilitar o tratamento no openCameraIntent
     private static final int ID_1 = R.id.buttonImage1;
     private static final int ID_2 = R.id.buttonImage2;
     private static final int ID_3 = R.id.buttonImage3;
@@ -66,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String mCurrentPhotoPath;
 
-    private File file1, file2, file3, file4, file5, file6;
+    private File file1, file2, file3, file4, file5, file6; //Arquivo das imagens
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,25 +252,49 @@ public class MainActivity extends AppCompatActivity {
 
     public void uploadAll(View v) {
 
-        try {
-            upload("https://www.ufsj.xyz/upload.php", file1);
-        } catch (Exception e) {
-            Log.d("TAG", e.getMessage());
+        //Testar apenas 1 imagem
+        if(file1 != null){
+            try {
+                upload("https://www.ufsj.xyz/upload.php", file1);
+            } catch (Exception e) {
+                Log.d("TAG", e.getMessage());
+            }
         }
 
-
         //TODO não sei se mandar tudo junto vai dar algum erro, testar quando tiver o Webservice
+
 //        if(file1 != null && file2 != null && file3 != null
 //                && file4 != null && file5 != null && file6 != null){
+//
 //            try {
 //                upload("https://www.ufsj.xyz/upload.php", file1);
+//            } catch (Exception e) {
+//                Log.d("UPLOAD1", e.getMessage());
+//            }
+//            try {
 //                upload("https://www.ufsj.xyz/upload.php", file2);
+//            } catch (Exception e) {
+//                Log.d("UPLOAD2", e.getMessage());
+//            }
+//            try {
 //                upload("https://www.ufsj.xyz/upload.php", file3);
+//            } catch (Exception e) {
+//                Log.d("UPLOAD3", e.getMessage());
+//            }
+//            try {
 //                upload("https://www.ufsj.xyz/upload.php", file4);
+//            } catch (Exception e) {
+//                Log.d("UPLOAD4", e.getMessage());
+//            }
+//            try {
 //                upload("https://www.ufsj.xyz/upload.php", file5);
+//            } catch (Exception e) {
+//                Log.d("UPLOAD5", e.getMessage());
+//            }
+//            try {
 //                upload("https://www.ufsj.xyz/upload.php", file6);
 //            } catch (Exception e) {
-//                Log.d("TAG", e.getMessage());
+//                Log.d("UPLOAD6", e.getMessage());
 //            }
 //        }else{
 //            Toast.makeText(this, "Todas as imagens são necessárias",
