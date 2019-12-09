@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Upload Images</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="send_images">Send Images</string>
+    <string name="permission_storage">This permission is needed to store the images in your device</string>
+    <string name="permission_camera">This permission is needed to use the camera</string>
 </resources>

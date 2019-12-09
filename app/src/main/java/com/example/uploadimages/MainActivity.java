@@ -1,49 +1,31 @@
-package com.example.sergiool.myapplication;
+package com.example.uploadimages;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-
 /**
- * Necessário ter as permissões e um FileProvider no Manifest,
- * além de um XML "file_paths" na pasta "res>xml"
+ * It is necessary to have all the following permissions
+ * and a FileProvider in Manifest.
+ * The file provider must be an XML named "file_paths" at "res>xml"
  *
  * Permissões necessárias:
  *
@@ -52,6 +34,7 @@ import okhttp3.ResponseBody;
  * <uses-permission android:name="android.permission.CAMERA" />
  * <uses-permission android:name="android.permission.IMAGE_CAPTURE" />
  *
+ * Author: gabrielrra <gabrielrra.dev@gmail.com>
  **/
 
 public class MainActivity extends AppCompatActivity {
@@ -63,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int IMG_5 = 15;
     private static final int IMG_6 = 16;
 
-    //Transfomar a id dos botões em constantes, para facilitar o tratamento no openCameraIntent
+    //Transfom the buttons' id into constants, to ease the code
     private static final int ID_1 = R.id.buttonImage1;
     private static final int ID_2 = R.id.buttonImage2;
     private static final int ID_3 = R.id.buttonImage3;
@@ -108,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent pictureIntent = new Intent(
                 MediaStore.ACTION_IMAGE_CAPTURE);
+
         if (pictureIntent.resolveActivity(getPackageManager()) != null) {
             //Create a file to store the image
             File photoFile = null;
@@ -118,8 +102,10 @@ public class MainActivity extends AppCompatActivity {
             }
             if (photoFile != null) {
 
+                Log.d("PHOTO FILE PATH - ", photoFile.getAbsolutePath());
+
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.sergiool.myapplication.provider", photoFile);
+                        "com.example.uploadimages.provider", photoFile);
 
                 pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
 
@@ -162,11 +148,11 @@ public class MainActivity extends AppCompatActivity {
                         Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                getFilesDir();
         File image = File.createTempFile(
-                imageFileName,  /* prefixo */
-                ".jpg",         /* sufixo */
-                storageDir      /* diretório */
+                imageFileName,  /* prefix */
+                ".jpg",         /* sufix */
+                storageDir      /* directory */
         );
 
         imageFilePath = image.getAbsolutePath();
@@ -179,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             Bitmap image, compressed;
-            switch (requestCode){
+            switch (requestCode) {
                 case IMG_1:
                     image = BitmapFactory.decodeFile(file1.getAbsolutePath());
                     compressed = Bitmap.createScaledBitmap(image, 100, 100, true);
@@ -252,16 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void uploadAll(View v) {
 
-        //Testar apenas 1 imagem
-        if(file1 != null){
-            try {
-                upload("https://www.ufsj.xyz/upload.php", file1);
-            } catch (Exception e) {
-                Log.d("TAG", e.getMessage());
-            }
-        }
-
-        //TODO não sei se mandar tudo junto vai dar algum erro, testar quando tiver o Webservice
+        //Handle sending multiple files to any server
 
 //        if(file1 != null && file2 != null && file3 != null
 //                && file4 != null && file5 != null && file6 != null){

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Upload Imagens</string>
+    <string name="send_images">Enviar Imagens</string>
+    <string name="take_picture">Tirar Foto</string>
+    <string name="permission_camera">Permissão necessária para usar a camêra</string>
+    <string name="permission_storage">Permissão necessária para arquivar as imagens no dispositivo</string>
+</resources>
